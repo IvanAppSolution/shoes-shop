@@ -138,3 +138,22 @@
 .prev-image-upload:hover img{
   display: block;
 }
+
+.admin-table thead {
+  @apply bg-muted text-muted-foreground;
+}
+.admin-table tbody tr {
+  @apply text-gray-900 text-sm text-left
+}
+
+.admin-table thead th {
+  @apply px-4 py-3 font-semibold truncate text-left;
+}
+
+.admin-table tbody tr {
+  @apply border-t border-gray-500/20;
+}
+
+.admin-table tbody td {
+  @apply px-4 py-3;
+}

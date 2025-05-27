@@ -2,14 +2,14 @@
 import {
 	Table,
 	TableBody,
-	TableCell,
+	td,
 	TableHead,
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { User } from "@prisma/client";
 import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client"; 
+import { User } from "@/lib/generated/prisma";
 
 export default function UsersTable() {
 	const [users, setUsers] = useState<User[]>([]);
@@ -57,37 +57,39 @@ export default function UsersTable() {
 	}
 
 	return (
-		<Table>
-			<TableHeader>
-				<TableRow>
-					<TableHead>Name</TableHead>
-					<TableHead>Email</TableHead>
-					<TableHead>Role</TableHead>
-					<TableHead>Verified</TableHead>
-					<TableHead>Status</TableHead>
-					<TableHead>Joined</TableHead>
-				</TableRow>
-			</TableHeader>
-			<TableBody>
-				{users.map((user) => (
-					<TableRow key={user.id}>
-						<TableCell>{user.name}</TableCell>
-						<TableCell>{user.email}</TableCell>
-						<TableCell>{user.role ?? ""}</TableCell>
-						<TableCell>{user.emailVerified ? "Yes" : "No"}</TableCell>
-						<TableCell>
-							{user.banned ? (
-								<span className="text-red-500">Banned</span>
-							) : (
-								<span className="text-green-500">Active</span>
-							)}
-						</TableCell>
-						<TableCell>
-							{new Date(user.createdAt).toLocaleDateString()}
-						</TableCell>
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
+			<div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
+				<table className="md:table-auto table-fixed w-full overflow-hidden admin-table">
+					<thead>
+						<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th className="hidden md:block">Role</th>
+								<th>Status</th>
+								<th>Joined</th>
+						</tr>
+					</thead>
+					<tbody>
+					{users.map((user) => (
+						<tr key={user.id}>
+							<td>{user.name}</td>
+							<td>{user.email}</td>
+							<td>{user.role ?? ""}</td>
+							<td>
+								{user.banned ? (
+									<span className="text-red-500">Banned</span>
+								) : (
+									<span className="text-green-500">Active</span>
+								)}
+							</td>
+							<td>
+								{new Date(user.createdAt).toLocaleDateString()}
+							</td>
+						</tr>
+					))}
+					</tbody>
+				</table>	
+			</div>
+	 
+		 
 	);
 }

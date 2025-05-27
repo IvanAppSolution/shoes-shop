@@ -27,7 +27,7 @@ export default function Content({product}: {product: Product}) {
                 <Link href={"/products"}> Products</Link> /
                 <Link href={`/products?search=${product.brand}`}> {product.brand}</Link> /
                 <span className="text-primary"> {product.name}</span>
-                <Link href={`/admin/product/${product.id}`}> Edit </Link>
+                <Link href={`/admin/products/${product.id}`}> Edit </Link>
             </p>
 
 
