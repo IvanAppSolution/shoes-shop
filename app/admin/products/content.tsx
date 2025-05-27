@@ -4,7 +4,7 @@ import { Product } from "@/lib/generated/prisma"
 import React, { useActionState, useContext, useEffect, useState } from "react"
 import SidePanel from "../side-panel";
 import { useRouter } from "next/navigation";
-import { updateProductStock, deleteProduct } from "../product/[id]/product-actions";
+import { updateProductStock, deleteProduct } from "./[id]/product-actions";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import ProductsFilter from "@/components/ui/products-filter";
@@ -21,6 +21,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
+import { Link } from "lucide-react";
 
 interface ProductsPaginationProps {
     productList: Product[]|[];
@@ -132,43 +133,45 @@ export default function Content({productList}: ProductsPaginationProps) {
 
   return (
     <SidePanel>
-      <div className="no-scrollbar flex-1 flex flex-col justify-between">
-          <div className="w-full md:p-10 p-4">
+        <div className="no-scrollbar flex-1 flex flex-col justify-between">
+            <div className="w-full md:p-10 p-4">
                 <div className="relative h-12">
                     <ProductsFilter className="absolute left-0" />
                     <Button className="w-32 absolute right-0 cursor-pointer" onClick={()=>router.push("/admin/product/add")} >Add Product</Button>
                 </div>
                 
-              <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
-                  <table className="md:table-auto table-fixed w-full overflow-hidden">
-                      <thead className="text-gray-900 text-sm text-left">
+                <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
+                  <table className="md:table-auto table-fixed w-full overflow-hidden admin-table">
+                      <thead>
                           <tr>
-                              <th className="px-4 py-3 font-semibold truncate">Product</th>
-                              <th className="px-4 py-3 font-semibold truncate">Brand</th>
-                              <th className="px-4 py-3 font-semibold truncate hidden md:block">Price</th>
-                              <th className="px-2 py-3 font-semibold truncate">In Stock</th>
-                              <th className="px-2 py-3 font-semibold truncate">Action</th>
+                              <th>Product</th>
+                              <th>Brand</th>
+                              <th className="hidden md:block">Price</th>
+                              <th>In Stock</th>
+                              <th>Action</th>
                           </tr>
                       </thead>
-                      <tbody className="text-sm text-gray-500">
+                      <tbody>
                           {products.map((product) => (
-                              <tr key={product.id} className="border-t border-gray-500/20 cursor-pointer" >
-                                  <td onClick={()=>router.push("/admin/product/"+product.id)} className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
+                              <tr key={product.id} >
+                                  <td onClick={()=>router.push(`/admin/products/${product.id}`)} className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate cursor-pointer">
                                       <div className="p-2">
-                                          <img src={product.images[0] ?? "/images/empty.png"} alt="Product" className="w-16" />
+                                        
+                                          <Image src={product.images[0] ?? "/images/empty.png"} alt="Product" className="w-16" width={100} height={100} />
+                                        
                                       </div>
                                       <span className="truncate max-sm:hidden w-full">{product.name}</span>
                                   </td>
-                                  <td className="px-4 py-3">{product.brand}</td>
-                                  <td className="px-4 py-3 max-sm:hidden">{currency}{product.offerPrice}</td>
-                                  <td className="px-4 py-3">
+                                  <td className="">{product.brand}</td>
+                                  <td className="max-sm:hidden">{currency}{product.offerPrice}</td>
+                                  <td className="">
                                       <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
                                           <input onChange={()=> toggleStock(product.id, !product.inStock)} checked={product.inStock} type="checkbox" className="sr-only peer" />
                                           <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
                                           <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
                                       </label>
                                   </td>
-                                  <td className="px-4 py-3">
+                                  <td className="">
                                     <button onClick={()=> openDeleteDialog(product.id)} className="cursor-pointer mx-auto">
                                         <Image src={assets.remove_icon} alt="remove" className="inline-block w-6 h-6"  />
                                     </button>

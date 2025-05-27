@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/admin',
-        destination: '/admin/product-list',
+        destination: '/admin/products',
       },
     ]
   },

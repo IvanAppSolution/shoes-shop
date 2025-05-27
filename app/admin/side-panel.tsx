@@ -7,10 +7,10 @@ export default function SidePanel({children}:{children: ReactNode}) {
 	const router = useRouter();
   const pathname = usePathname()
   
-	const sidebarLinks = [
-      // { name: "Add Product", path: "/admin/add-product", icon: assets.add_icon },
-      { name: "Product List", path: "/admin", icon: assets.product_list_icon },
+	const sidebarLinks = [    
+      { name: "Products", path: "/admin", icon: assets.product_list_icon },
       { name: "Orders", path: "/admin/orders", icon: assets.order_icon },
+      { name: "Users", path: "/admin/users", icon: assets.add_icon },
   ];
 
   return (
