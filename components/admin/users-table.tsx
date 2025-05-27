@@ -1,12 +1,4 @@
 "use client";
-import {
-	Table,
-	TableBody,
-	td,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
 import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client"; 
 import { User } from "@/lib/generated/prisma";
