@@ -1,0 +1,202 @@
+// import { MongoClient, ServerApiVersion, Document, WithId } from "mongodb";
+import { Prisma, Product } from "./generated/prisma";
+import prisma from "./prisma";
+
+const seedProducts = async () => {
+  const count = await prisma.product.count();
+  if (count === 0) {
+    await prisma.product.createMany({
+      data: [
+        { name: "Product 1", price: 100, description: "Description 1", offerPrice: 90, category: "Category 1", inStock: true },
+        { name: "Product 2", price: 100, description: "Description 2", offerPrice: 89, category: "Category 1", inStock: true },
+        { name: "Product 3", price: 100, description: "Description 3", offerPrice: 80, category: "Category 1", inStock: true },
+      ],
+    });
+  }
+};
+
+// Run seed if needed
+// seedProducts();
+interface GetProductsParams {
+  search?: string;
+  brand?: string;
+  category?: string;
+  tags?: string;
+  perPage?: number;
+  offset?: number;
+}
+
+export async function getProducts(params: GetProductsParams): Promise<[Product[], number]> {
+    console.log('db-getProducts-params: ', params)
+    let where = {}
+
+    if (params.search) {
+      where = {
+        OR: [
+          { name: { contains: params.search, mode: Prisma.QueryMode.insensitive } },
+          { description: { contains: params.search, mode: Prisma.QueryMode.insensitive } },
+          { brand: { contains: params.search, mode: Prisma.QueryMode.insensitive } },
+          { tags: { contains: params.search, mode: Prisma.QueryMode.insensitive } },
+        ],
+      };
+      
+    } else if (params.brand) {
+      where = {
+        OR: [
+          { brand: { contains: params.brand, mode: Prisma.QueryMode.insensitive } }
+        ]
+      };
+
+
+    } else if (params.tags) {
+      where = {
+        OR: [
+          { tags: { contains: params.tags, mode: Prisma.QueryMode.insensitive } }
+        ]
+      };
+
+    } else {      
+      where = {
+      };      
+    }
+
+    const [products, count] = await prisma.$transaction([
+      prisma.product.findMany({
+        where,
+        skip: params.offset,
+        take: params.perPage,          
+        orderBy: {name:"asc"}
+      }),
+      prisma.product.count({where})
+    ]);
+    console.log('result-products.length: ', products.length)
+    console.log('db-search-products-count: ', count)
+    return [products, count];
+ 
+}
+
+
+export async function getProduct(id: string):Promise<Product | null> {
+  // console.log('db-getProduct-id: ', id)
+  return await prisma.product.findFirst({
+    where: { id },
+  });
+}
+ 
+export async function addProduct(
+  {
+    name,
+    brand,
+    price,
+    offerPrice,
+    description,    
+    inStock,
+    category,
+    tags,
+    quantity,
+    images,
+  }:
+  {
+    name: string,
+    brand: string,
+    price: number,
+    offerPrice: number,
+    description?: string,    
+    inStock?: boolean,
+    category?: string,
+    tags?: string,
+    quantity: number,
+    images?: string[] | undefined
+  }
+  ) {
+    const createdAt = new Date();
+    const updatedAt = new Date();
+    console.log('----------INSERT----------------')
+    return prisma.product.create({
+      data: { name, price, offerPrice, description, inStock, category, brand, tags, quantity, images: images ? images : undefined },
+    });
+}
+
+export async function updateProduct(
+  {
+    id,
+    name,
+    brand,
+    price,
+    offerPrice,
+    description,    
+    inStock,
+    category,
+    tags,
+    quantity,
+    images,
+  }:
+  {
+    id: string,
+    name: string,
+    brand: string,
+    price: number,
+    offerPrice: number,
+    description?: string,    
+    inStock?: boolean,
+    category?: string,
+    tags?: string,
+    quantity: number,
+    images?: string[] | undefined
+  }
+  ) {
+    console.log('----------UPDATE----------------')
+    return prisma.product.update({
+      where: { id },
+      data: { name, price, offerPrice, description, inStock, category, brand, tags, quantity, images: images ? images : undefined },
+    });
+}
+
+export async function deleteProduct(id: string) {
+  return prisma.product.delete({
+    where: { id },
+  });
+}
+
+// export async function getRelatedProducts(productId?: string): Promise<Product[]> {
+//   if (productId) {
+//     const product:Product | any = await getProduct(productId);
+
+//     if (product) {
+//       return prisma.product.findMany({
+//         where: {
+//           OR: [
+//             { tags: 'best seller' }
+//           ],
+//           NOT: {
+//             id: product.id,
+//           },
+//         },
+//       });
+//     } else {
+//       return [];
+//     }
+//   }
+
+//   return prisma.product.findMany();
+// }
+
+//---------- Cart --------------//
+export async function updateCart(
+  userId: string,
+  cartItems: Record<string, number>,
+) {
+  // await new Promise((resolve) => setTimeout(resolve, 1500));
+  return prisma.user.update({
+    where: { id: userId },
+    data: { cartItems },
+  });
+}
+
+export async function getCartItems(userId: string){
+  return prisma.user.findFirst({select: {cartItems: true}, where: {id: userId}})
+}
+
+export async function getUserAddress(userId: string){
+  return prisma.address.findFirst({where: {id: userId}})
+}
