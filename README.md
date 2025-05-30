@@ -1,24 +1,36 @@
 ## Online Product 
-Project by Ivan Alcuino using NextJs.
+Project by Ivan Alcuino using NextJs(15)/MongoDB/Tailwindcss/Shadcn.
 
 ## Description
-Online product project that display products from fakeapi.platzi.com using nuqs filter to search and paginate products. It uses better-auth to manage user management Sign-in, Sign-up, Sign-out, Forgot password, Reset Password. Using zod to handle form fields and page validation. Using sendgrid to handle email. It has a middleware that manage page for users and admin.<br/>
-
-## Libraries
-Shadcn<br/>
-drizzle ORM<br/>
-Neon/Postgresql<br/>
-nuqs<br/>
-better-auth<br/>
-zod<br/>
-sendgrid<br/>
+* Online shoes shop that stores record to mongodb using shadcn ui and tailwindcss.
+* It uses nuqs filter to search and paginate products.
+* It uses better-auth to manage user management Sign-in, Sign-up, Sign-out, Forgot password, Reset Password.
+* Using zod to handle form fields and page validation.
+* User can add product to cart and purchase using stripe payment in test-mode.
+* Using sendgrid to handle email. It has a middleware that manage page for users and admin.
+  <br/>
+ **Admin**
+* It manage products, orders and users in admin page.
+* Stores images to vercel blob file storage.
 <br/>
 
+## Libraries
+* Shadcn
+* Prisma ORM
+* Mongodb
+* Nuqs
+* Better-auth
+* Zod
+* Sendgrid
+* Vercel blob file storage
+
+<br/><br/>
+
 Host server: Vercel<br/>
-[Online-product](https://online-product.vercel.app/)<br/>
+[Shoes Shop](https://shoes-shop-iota.vercel.app/)<br/>
 
 Preview:
-![Image](https://github.com/user-attachments/assets/0bac64ea-06df-475c-9192-b2dc072aefe2)
+![Image](https://github.com/user-attachments/assets/b76c61c8-2f8b-4d62-8d04-8d9f773e5ef0)
 
 
 ## Getting Started
