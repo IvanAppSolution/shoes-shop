@@ -26,17 +26,29 @@ import bottom_banner_image from "./bottom_banner_image.png";
 import bottom_banner_image_sm from "./bottom_banner_image_sm.png";
 import add_address_image from "./add_address_image.svg";
 import adidas_image from "./logo/adidas.png";
+import adidas_tiny_image from "./logo/30x30/adidas.png";
 import asic_image from "./logo/asic.png";
+import asic_tiny_image from "./logo/30x30/asic.png";
 import brooks_image from "./logo/brooks.png";
+import brooks_tiny_image from "./logo/30x30/brooks.png";
 import hoka_image from "./logo/hoka.png";
+import hoka_tiny_image from "./logo/30x30/hoka.png";
 import new_balance_image from "./logo/new-balance.png";
+import new_tiny_balance_image from "./logo/30x30/new-balance.png";
 import nike_image from "./logo/nike.png";
+import nike_tiny_image from "./logo/30x30/nike.png";
 import puma_image from "./logo/puma.png";
+import puma_tiny_image from "./logo/30x30/puma.png";
 import reebok_image from "./logo/reebok.png";
+import reebok_tiny_image from "./logo/30x30/reebok.png";
 import saucony_image from "./logo/saucony.png";
+import saucony_tiny_image from "./logo/30x30/saucony.png";
 import under_armour_image from "./logo/under-armour.png";
+import under_tiny_armour_image from "./logo/30x30/under-armour.png";
 import mizuno_image from "./logo/mizuno.jpg";
+import mizuno_tiny_image from "./logo/30x30/mizuno.jpg";
 import on_cloud_image from "./logo/on-cloud.png";
+import on_cloud_tiny_image from "./logo/30x30/on-cloud.png";
 import samplePayment from "./sample-payment.jpg";
 
 export const assets = {
@@ -75,72 +87,84 @@ export const brands = [
     text: "Nike",
     path: "nike",
     image: nike_image,
+    tinyImage: nike_tiny_image,
     bgColor: "#FEF6DA",
   },
   {
     text: "Adidas",
     path: "adidas",
     image: adidas_image,
+    tinyImage: adidas_tiny_image,
     bgColor: "#FEE0E0",
   },
   {
     text: "Puma",
     path: "puma",
     image: puma_image,
+    tinyImage: puma_tiny_image,
     bgColor: "#E1F5EC",
   },
   {
     text: "Asics",
     path: "asics",
     image: asic_image,
+    tinyImage: asic_tiny_image,
     bgColor: "#F0F5DE",
   },
   {
     text: "New Balance",
     path: "new balance",
     image: new_balance_image,
+    tinyImage: new_tiny_balance_image,
     bgColor: "#FEE6CD",
   },
   {
     text: "Hoka",
     path: "hoka",
     image: hoka_image,
+    tinyImage: hoka_tiny_image,
     bgColor: "#E0F6FE",
   },
   {
     text: "Brooks",
     path: "brooks",
     image: brooks_image,
+    tinyImage: brooks_tiny_image,
     bgColor: "#F1E3F9",
   },
   {
     text: "Under Armor",
     path: "under armor",
     image: under_armour_image,
+    tinyImage: under_tiny_armour_image,
     bgColor: "#FEE6CD",
   },
   {
     text: "Reebok",
     path: "reebok",
     image: reebok_image,
+    tinyImage: reebok_tiny_image,
     bgColor: "#E0F6FE",
   },
   {
     text: "Saucony",
     path: "saucony",
     image: saucony_image,
+    tinyImage: saucony_tiny_image,
     bgColor: "#F1E3F9",
   },
   {
     text: "Mizuno",
     path: "mizuno",
     image: mizuno_image,
+    tinyImage: mizuno_tiny_image,
     bgColor: "#F1E3F9",
   },
   {
     text: "On Cloud",
     path: "on cloud",
     image: on_cloud_image,
+    tinyImage: on_cloud_tiny_image,
     bgColor: "#E0F6FE",
   },
   

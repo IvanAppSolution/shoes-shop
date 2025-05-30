@@ -76,11 +76,17 @@ export async function getProducts(params: GetProductsParams): Promise<[Product[]
 }
 
 
-export async function getProduct(id: string):Promise<Product | null> {
+export async function getProduct(id: string): Promise<Product> {
   // console.log('db-getProduct-id: ', id)
-  return await prisma.product.findFirst({
+  const product = await prisma.product.findFirst({
     where: { id },
   });
+
+  if (!product) {
+    return {} as Product; // Return an empty object if product not found
+  }
+
+  return product;
 }
  
 export async function addProduct(
@@ -109,8 +115,6 @@ export async function addProduct(
     images?: string[] | undefined
   }
   ) {
-    const createdAt = new Date();
-    const updatedAt = new Date();
     console.log('----------INSERT----------------')
     return prisma.product.create({
       data: { name, price, offerPrice, description, inStock, category, brand, tags, quantity, images: images ? images : undefined },
@@ -158,28 +162,67 @@ export async function deleteProduct(id: string) {
   });
 }
 
-// export async function getRelatedProducts(productId?: string): Promise<Product[]> {
-//   if (productId) {
-//     const product:Product | any = await getProduct(productId);
+const randomPick = (values: string[]) => {
+  const index = Math.floor(Math.random() * values.length);
+  return values[index];
+}
 
-//     if (product) {
-//       return prisma.product.findMany({
-//         where: {
-//           OR: [
-//             { tags: 'best seller' }
-//           ],
-//           NOT: {
-//             id: product.id,
-//           },
-//         },
-//       });
-//     } else {
-//       return [];
-//     }
-//   }
+const orderBy = randomPick(['id', 'name', 'createdAt']);
+const orderDir = randomPick([`asc`, `desc`]);
 
-//   return prisma.product.findMany();
-// }
+export async function getRelatedProducts({ productId = "" }: { productId: string }): Promise<Product[]> {
+  let result = [] as Product[];
+  if (productId) {
+      const product = await prisma.product.findFirst({
+        where: { id: productId },
+      });
+     
+      result = await prisma.product.findMany({
+        where: {
+          OR: [
+            { brand: product?.brand }
+          ],
+          NOT: {
+            id: productId,
+          },
+        },
+        orderBy: { 
+        },
+        take: 8,
+      });
+    }
+      
+      const result2 = await prisma.product.findMany({
+        where: {
+          OR: [
+            { tags: "best seller" }
+          ],
+          NOT: {
+            id: productId,
+          },
+        },
+        orderBy: { [orderBy]: orderDir },
+        take: result.length < 8 ? 8 - result.length : 0,
+      });
+
+      return [...result, ...result2];
+  // } else {
+  //   return []
+  // }
+  
+}
+
+export async function getBestSellerProducts(): Promise<Product[] | []> {
+  return await prisma.product.findMany({
+    where: {
+      OR: [
+        { tags: 'best seller' }
+      ],
+    },
+    orderBy: { [orderBy]: orderDir },
+    take: 8,
+  });  
+}
 
 //---------- Cart --------------//
 export async function updateCart(
@@ -199,4 +242,32 @@ export async function getCartItems(userId: string){
 
 export async function getUserAddress(userId: string){
   return prisma.address.findFirst({where: {id: userId}})
+}
+
+export async function insertOrder(
+  {
+    userId,
+    items,
+    address,
+    amount,
+    paymentType,
+    isPaid = false,
+  }:
+  {
+    userId: string
+    items: Record<string, number>,
+    address: string
+    amount: number
+    paymentType: string,
+    isPaid?: boolean
+  }
+  ) {
+    try {
+      return prisma.order.create({
+        data: { userId, items, address, amount, paymentType, isPaid}
+      });
+    } catch(error) {
+      console.error('Error inserting order:', error);
+      throw error;
+    }    
 }

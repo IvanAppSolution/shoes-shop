@@ -8,6 +8,7 @@ import Footer from "@/components/footer";
 import { AppContextProvider } from "@/components/context";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { headers } from 'next/headers';
+import  LoadTimeTracker from '@/components/load-time';
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -50,14 +51,15 @@ export default async function RootLayout({
                   <Header></Header>
                   <main className='text-default min-h-screen text-gray-700 bg-white'>
                     <div className={"px-6 " + (inAdminPage ? "" : " md:px-16 lg:px-24 xl:px-32")}> 
-                      <NuqsAdapter>
+                      <NuqsAdapter>                            
                         {children}
                       </NuqsAdapter>
                     </div>
                   </main>
                 </AppContextProvider>
               <Toaster />
-            </ThemeProvider>         
+            </ThemeProvider>        
+            <LoadTimeTracker /> 
           <Footer/>
         </body>
       </html>

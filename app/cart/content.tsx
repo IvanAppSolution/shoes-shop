@@ -1,6 +1,6 @@
 
 "use client";
-import { useActionState, useContext, useEffect, useState } from "react";
+import React, { useActionState, useContext, useEffect, useState } from "react";
 import { assets } from "@/assets/assets";
 import { AppContext } from "@/components/context";
 import { toast } from "@/hooks/use-toast";
@@ -22,7 +22,8 @@ export default function Content() {
     const initialState = {
         success: false,
         message: '',
-        url: ''
+        url: '',
+        paymentOption: ''
       }
     const [state, action, isPending] = useActionState(checkoutAction, initialState);
     
@@ -113,10 +114,22 @@ export default function Content() {
                 })
             }
  
+            const items = products.map((item: any) => {
+                return {
+                    id: item.id,
+                    name: item.name,
+                    description: item.description,
+                    offerPrice: item.offerPrice,
+                    quantity: item.quantity,
+                    amount: item.amount
+                }
+            })
+
+
             let formData = new FormData();
             formData.append("userId", user.id);
             formData.append("totalAmount", totalAmount.toString());
-            formData.append("products", JSON.stringify(products));
+            formData.append("items", JSON.stringify(items));
             formData.append("address", JSON.stringify(selectedAddress));
  
             if(paymentOption === "COD"){
@@ -125,7 +138,9 @@ export default function Content() {
                 formData.append("paymentOption", "online payment");
             }
 
-            action(formData);
+            React.startTransition(async () => {
+                action(formData);
+            });
             
         } catch (error) {
             toast({
@@ -154,7 +169,15 @@ export default function Content() {
     }, [cartItems])
 
     useEffect(() => {
-        if (state.success) {
+        if (state.success && state.paymentOption === "COD") {
+            toast({
+                title: "Order placed successfully",
+                description: "Your order will be delivered soon.",
+                variant: "default"
+            })
+            emptyCart();
+            router.push("/success");
+        } else if (state.success && state.paymentOption === "online payment") {
             window.location.replace(state.url)
         }
             

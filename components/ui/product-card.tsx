@@ -18,8 +18,8 @@ export default function ProductCard ({product}: ProductCardProps) {
 
     function getLogo (findBrand: string | null) {
         if (findBrand)
-            return brands.find(brand => brand.text.toLocaleLowerCase() === findBrand.toLocaleLowerCase())?.image
-        else return null
+            return brands.find(brand => brand.text.toLocaleLowerCase() === findBrand.toLocaleLowerCase())?.tinyImage
+        else return null;
     }
 
     function getRandom () {
@@ -32,18 +32,18 @@ export default function ProductCard ({product}: ProductCardProps) {
     }, []);
    
     return product && (
-        <div className="border border-gray-500/20 rounded-md md:px-4 px-2 py-2 bg-white min-w-48 max-w-56 w-full">
+        <div className="border border-gray-500/20 rounded-md md:px-4 px-2 py-2 bg-white min-w-48 max-w-56 w-full relative">
             <div className="group cursor-pointer flex items-center justify-center px-2 overflow-hidden" style={{height:"150px"}}>
                 <Link href={`/products/${product.id}`}>
-                    <Image className="group-hover:scale-105 transition max-w-26 md:max-w-36" src={product.images[0] ?? "/images/empty.png"} alt={product.name} height="150" width="150" style={{ width: "auto", height: "auto" }} />
+                    <Image className="group-hover:scale-105 transition max-w-26 md:max-w-36" src={product.images[0] ?? "/images/empty.png"} alt={product.name} height="150" width="150"  />
                 </Link>
             </div>
-            <div className="text-gray-500/60 text-sm">
+            <div className="text-gray-500/60 text-sm ">
                 <p className="text-gray-700 font-medium text-lg truncate w-full">{product.name}</p>
-                { product.brand ? <Image src={getLogo(product.brand) ?? "/images/empty.png"} alt={`${product.brand} logo`} height="30" width="30" style={{ width: "30", height: "30" }} /> : false}
+                { product.brand ? <Image src={getLogo(product.brand) ?? "/images/empty_tiny.png"} width={30} height={30} alt={`${product.brand}`} className="absolute top-2 left-2" /> : false}
                 <div className="flex items-center gap-0.5 mt-1">
                     {Array(5).fill('').map((_, i) => (
-                         <Image  key={i} className="md:w-3.5 w3" src={i < rating ? assets.star_icon : assets.star_dull_icon} alt="rating" width="10" height="10" style={{ width: "10", height: "10" }} />
+                         <Image  key={i} className="md:w-3.5 w3" src={i < rating ? assets.star_icon : assets.star_dull_icon} alt="rating" width="10" height="10"   />
                     ))}
                     <p>({rating})</p>
                 </div>

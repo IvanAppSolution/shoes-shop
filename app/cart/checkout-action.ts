@@ -1,9 +1,12 @@
 "use server";
 import { stripe } from "@/lib/stripe";
+import {insertOrder} from "@/lib/db";
+
 type ActionResponse = {
   success: boolean;
   message: string;
   url: string;
+  paymentOption?: string;
 }
 export async function checkoutAction (
   prevState: ActionResponse | null,
@@ -12,13 +15,13 @@ export async function checkoutAction (
   try {
 
   const userId = formData.get("userId") as string;
-  const products = formData.get("products") ? JSON.parse(formData.get("products") as string) : null;
+  const items = formData.get("items") ? JSON.parse(formData.get("items") as string) : null;
   const address = formData.get("address") as string;
   const totalAmount = formData.get("totalAmount") as string;
   const paymentOption = formData.get("paymentOption") as string;
    
   if (paymentOption === "online payment") {
-    const line_items = products.map((product: any) => ({
+    const line_items = items.map((product: any) => ({
       price_data: {
         currency: "usd",
         product_data: { name: product?.name, description: product?.description },
@@ -36,19 +39,41 @@ export async function checkoutAction (
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
     });
 
-    // console.log('session: ', session)
+    // console.log('session: ', session) 
+
+    insertOrder({
+      userId,
+      items,
+      address,
+      amount: parseFloat(totalAmount),
+      paymentType: paymentOption
+    });
+
     return {
       success: true,
       message: "Successfully place order",
       url: session.url!,
+      paymentOption: paymentOption
     };
     // redirect(session.url!);
   } else {
-    console.log('goes here: ')
+     
+    console.log('insert COD items: ', items)
+
+    insertOrder({
+      userId,
+      items,
+      address,
+      amount: parseFloat(totalAmount),
+      paymentType: paymentOption      
+    });
+     
+
     return {
       success: true,
       message: "Successfully place order",
       url: "",
+      paymentOption: paymentOption
     };
   }
 

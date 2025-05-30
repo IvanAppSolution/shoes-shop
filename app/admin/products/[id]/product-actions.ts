@@ -1,6 +1,6 @@
 "use server";
 import { addProduct, updateProduct } from "@/lib/db";
-import { productFormSchemaBE, type ActionResponse, type ProductFormData } from "@/types/product";
+import { productFormSchemaBE, type ActionResponse } from "@/types/product";
 import { put } from '@vercel/blob';
 import prisma from "@/lib/prisma";
 import { Product } from "@/lib/generated/prisma";
@@ -15,12 +15,12 @@ export async function formProduct(
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const brand = formData.get("brand") as string;
-    const offerPrice = formData.get("offerPrice") ? Number(formData.get("offerPrice")) : 0; // formData.get("offerPrice") ? Number(formData.get("offerPrice")) : 0 as number;
+    const offerPrice = formData.get("offerPrice") ? Number(formData.get("offerPrice")) : 0;
     const price = formData.get("price") ? Number(formData.get("price")) : 0;
     const inStock = formData.get("inStock") === "true";
     const tags = formData.get("tags") as string;
     const category = formData.get("category") as string;
-    const quantity = formData.get("quantity") ? Number(formData.get("quantity")) : 1; // formData.get("quantity") ? Number(formData.get("offerPrice")) : 0 as number;
+    const quantity = formData.get("quantity") ? Number(formData.get("quantity")) : 1;
     const images = formData.get("images") 
       ? JSON.parse(formData.get("images") as string)
       : undefined;
