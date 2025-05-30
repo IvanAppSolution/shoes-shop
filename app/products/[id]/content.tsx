@@ -1,27 +1,30 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { assets } from "../../../assets/assets";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Product } from "@/lib/generated/prisma";
 import Link from "next/link";
 import { AppContext } from "@/components/context";
-import RelatedProducts from "./related-products";
 
-export default function Content({product}: {product: Product}) {
+type Props = {
+    productPromise: Promise<Product>;
+}
+
+export default function Content({productPromise}: Props) {
+  const product = use(productPromise);
   const [thumbnail, setThumbnail] = useState('');
   const router = useRouter();
-  const {addToCart, setViewProductId, currency} = useContext(AppContext);
+  const {addToCart, currency} = useContext(AppContext);
 
   useEffect(()=>{
+    if (Object.keys(product).length === 0) return;
     setThumbnail(product?.images[0] ? product.images[0] : '')
-    console.log('Product-product.id: ', product.id)
-    setViewProductId(product.id)
   },[])
  
   
   return (
-    <div className="mt-12">
+    Object.keys(product).length ? <div className="mt-12">
             <p>
                 <Link href={"/"}>Home</Link> /
                 <Link href={"/products"}> Products</Link> /
@@ -42,7 +45,7 @@ export default function Content({product}: {product: Product}) {
                     </div>
 
                     <div className="max-w-100 overflow-hidden">
-                       { thumbnail ? <img src={thumbnail} alt="Selected product" width={400} height="auto" /> : null}
+                       { thumbnail ? <Image src={thumbnail} alt="Selected product" width={400} height={100} priority/> : null}
                     </div>
                 </div>
 
@@ -52,7 +55,6 @@ export default function Content({product}: {product: Product}) {
                     <div className="flex items-center gap-0.5 mt-1">
                         {Array(5).fill('').map((_, i) => (
                           <img key={i} src={i<4 ? assets.star_icon.src : assets.star_dull_icon.src} alt="star-icon" className="md:w-4 w-3.5" width="100" height="100"/>
-                            //  <Image key={i} className="md:w-3.5 w3" src={i < 4 ? assets.star_icon : assets.star_dull_icon} alt="" width="100" height="100"/>
                         ))}
                         <p className="text-base ml-2">(4)</p>
                     </div>
@@ -78,8 +80,6 @@ export default function Content({product}: {product: Product}) {
                     </div>
                 </div>
             </div>
-            {/* ---------- related products -------------- */}
-            <RelatedProducts />
-        </div>
+        </div> : <div>Product not found</div>  
   )
 }

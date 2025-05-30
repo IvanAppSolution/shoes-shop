@@ -118,3 +118,16 @@ model Address {
 
   @@map("address")
 }
+
+model Order {
+  id          String   @id @default(cuid()) @map("_id")
+  userId      String
+  items       Json     @default("{}")
+  amount      Float
+  address     String
+  status      String?
+  paymentType String?
+  isPaid      Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

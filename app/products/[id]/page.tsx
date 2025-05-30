@@ -4,6 +4,8 @@ import { Product } from "@/lib/generated/prisma";
 import Content from "./content";
 import { SearchParams } from "nuqs";
 import { loadSearchParams } from "@/lib/search-params";
+import RelatedProducts from "./related-products";
+import { Suspense } from "react";
  
 type PageProps = {
   params: Promise<{id: string}>
@@ -18,7 +20,16 @@ type PageProps = {
 
 export default async function ProductDetails({params}: PageProps) { 
   const { id } = await params
-    console.log('ProductDetails-id: ', id)
-    const product:Product | null = await getProduct(id);
-    return product ? <Content product={product}  /> : <p>Loading..</p>;
+    const product = getProduct(id);
+    return (
+      <div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Content productPromise={product}  />
+        </Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
+          <RelatedProducts productId={id} />
+        </Suspense>
+      </div>
+    )
+    
 };

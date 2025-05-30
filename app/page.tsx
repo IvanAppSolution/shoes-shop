@@ -1,8 +1,16 @@
 import React from 'react'
-import Content from './_landing/content';
+import MainBanner from './_landing/main-banner';
+import Categories from './_landing/categories';
+import BestSeller from './_landing/best-seller';
+import NewsLetter from './_landing/news-letter';
 
 export default async function Home() {
     return (
-        <Content/>
+        <div className="mt-12">
+            <MainBanner /> 
+            <Categories /> 
+            <BestSeller />
+            <NewsLetter /> 
+        </div>
     );
 }

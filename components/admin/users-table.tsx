@@ -50,7 +50,7 @@ export default function UsersTable() {
 
 	return (
 			<div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
-				<table className="md:table-auto table-fixed w-full overflow-hidden admin-table">
+				<table className="md:table-auto table-fixed w-full overflow-hidden table-list">
 					<thead>
 						<tr>
 								<th>Name</th>

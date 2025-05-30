@@ -89,7 +89,7 @@ model Product {
   description String?
   brand       String?
   price       Float
-  offerPrice Float
+  offerPrice  Float
   images      String[]
   category    String?
   tags        String?
@@ -118,4 +118,17 @@ model Address {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("address")
+}
+
+model Order {
+  id            String     @id @default(cuid()) @map("_id")
+  userId        String
+  items         Json       @default("{}")      
+  amount        Float
+  address       String
+  status        String?
+  paymentType   String?
+  isPaid        Boolean
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }

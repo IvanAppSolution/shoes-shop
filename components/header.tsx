@@ -56,6 +56,8 @@ export default function Header() {
   useEffect(() => {
     if (isLoaded === true && Object.keys(cartItems).length) {
       setCartCount(getCartCount());
+    } else {
+      setCartCount(0);  
     }
   }, [cartItems])
 
