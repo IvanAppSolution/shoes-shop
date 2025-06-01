@@ -1,7 +1,7 @@
 "use client";
 import { AppContext } from "@/components/context";
 import { Product } from "@/lib/generated/prisma"
-import React, { useActionState, useContext, useEffect, useState } from "react"
+import React, { use, useActionState, useContext, useEffect, useState } from "react"
 import SidePanel from "../side-panel";
 import { useRouter } from "next/navigation";
 import { updateProductStock, deleteProduct } from "./[id]/product-actions";
@@ -22,13 +22,16 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
 import { Link } from "lucide-react";
+import ProductsPagination from "@/components/ui/products-pagination";
 
-interface ProductsPaginationProps {
-    productList: Product[]|[];
+interface ProductsProps {
+    productListPromise: Promise<[Product[], number]>;
+    refetchProducts: () => void;
   }
 
-export default function Content({productList}: ProductsPaginationProps) {
+export default function Content({productListPromise, refetchProducts}: ProductsProps) {
 //   console.log('productList length: ', productList.length)  
+  const [productList, count] = use(productListPromise);
   const [products, setProducts] = useState<Product[]>([]); //<Product[] | []> useState(productList)
   const { currency} = useContext(AppContext);
   const router = useRouter();
@@ -132,6 +135,7 @@ export default function Content({productList}: ProductsPaginationProps) {
   }, [productList])
 
   return (
+    <>
     <SidePanel>
         <div className="no-scrollbar flex-1 flex flex-col justify-between">
             <div className="w-full md:p-10 p-4">
@@ -141,7 +145,8 @@ export default function Content({productList}: ProductsPaginationProps) {
                 </div>
                 
                 <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
-                  <table className="md:table-auto table-fixed w-full overflow-hidden table-list">
+                    { products.length ? (
+                    <table className="md:table-auto table-fixed w-full overflow-hidden table-list">
                       <thead>
                           <tr>
                               <th>Product</th>
@@ -179,10 +184,15 @@ export default function Content({productList}: ProductsPaginationProps) {
                               </tr>
                           ))}
                       </tbody>
-                  </table>
+                  </table> ) : <div className="text-center p-4">
+                      <p className="text-gray-500">Loading Products..</p>
+                    </div>}
               </div>
           </div>
       </div>
+      </SidePanel>
+      <ProductsPagination searchResultCount={count} refetchProducts={refetchProducts} /> 
+
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogTrigger asChild>
             {/* You can leave this empty, since you control open state manually */}
@@ -216,6 +226,6 @@ export default function Content({productList}: ProductsPaginationProps) {
             </AlertDialogFooter>
         </AlertDialogContent>
         </AlertDialog>
-    </SidePanel>
+        </>
   )
 }

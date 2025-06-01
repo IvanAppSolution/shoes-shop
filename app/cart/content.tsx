@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useActionState, useContext, useEffect, useState } from "react";
+import React, { use, useActionState, useContext, useEffect, useState } from "react";
 import { assets } from "@/assets/assets";
 import { AppContext } from "@/components/context";
 import { toast } from "@/hooks/use-toast";
@@ -8,16 +8,28 @@ import { Address, Product } from "@/lib/generated/prisma";
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import { checkoutAction } from "./checkout-action";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
 
-export default function Content() {    
-    const {user, cartItems, getCartCount, currency, updateCartItem, subtractFromCart, emptyCart} = useContext(AppContext);
-    const [products, setProducts] = useState<Product[]>([])
+export default function Content({productsPromise}: { productsPromise: Promise<Product[]> } ) {   
+    const {user, isLoaded, cartItems, getCartCount, currency, updateCartItem, subtractFromCart, emptyCart} = useContext(AppContext);
+    const [products, setProducts] = useState<Product[]>(use(productsPromise) || []); //<Product[] | []> useState(productList)
     const [addresses, setAddresses] = useState<Address[] | []>([])
     const [showAddress, setShowAddress] = useState(false)
     const [selectedAddress, setSelectedAddress] = useState<Address | undefined>(undefined)
     const [paymentOption, setPaymentOption] = useState("online payment")
     const [totalAmount, setTotalAmount] = useState(0)
-    const [isProductsLoaded, setIsProductsLoaded] = useState(false)
+    const [dialogOpen, setDialogOpen] = useState(false)
+    
     const router = useRouter();
     const initialState = {
         success: false,
@@ -26,44 +38,10 @@ export default function Content() {
         paymentOption: ''
       }
     const [state, action, isPending] = useActionState(checkoutAction, initialState);
-    
-
-    const getCartProducts = async () => {
-        let productsArray = []
-        const items = structuredClone(cartItems)
-
-        for(const key in cartItems) {
-            productsArray.push(key)
-        }
-
-        const response = await fetch('/api/products/getProductsByArray', { 
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(productsArray),
-        })
-
-        let products = await response.json()   
-        let product = null;
-        let totalAmount = 0;
-
-        if (products.length) {
-            const updateProducts = products.map((item: any)=>{
-                item.quantity = items[item.id];
-                item.amount = items[item.id] * item.offerPrice;
-                totalAmount += items[item.id] * item.offerPrice;
-                return item;
-            })
-            // console.log('updateProducts2: ', updateProducts) 
-            setProducts(updateProducts);
-            setTotalAmount(totalAmount);
-        }
-    }
+ 
 
     function adjustCartInfo() {
         let totalAmount = 0;
-        // console.log('adjustCartInfo-cartItems: ',cartItems)
         const updateProducts = products.filter(product => cartItems.hasOwnProperty(product.id))
         
         updateProducts.map((item: any)=>{
@@ -72,18 +50,6 @@ export default function Content() {
                 totalAmount += cartItems[item.id] * item.offerPrice;
         })
 
-        // for(const key in cartItems) {
-        //     updateProducts.map((item: any)=>{
-        //         if(item.id === key) {
-        //             item.quantity = cartItems[key];
-        //             item.amount = cartItems[key] * item.offerPrice;
-        //             totalAmount += cartItems[key] * item.offerPrice;
-        //         } 
-        //     })
-        // }
-        
-        console.log('adjustCartInfo-updateProducts: ',updateProducts)
-        // console.log('adjustCartInfo-products: ',products)
         setProducts(updateProducts);
         setTotalAmount(totalAmount);
     }
@@ -152,20 +118,17 @@ export default function Content() {
     }
 
     useEffect(() => {
-        if (user) getUserAddress();    
-    }, [user])
+        console.log('cart-user: ',user)
+        console.log('cart-products: ',products)
+        console.log('cart-isLoaded: ',isLoaded)
+        if (user) getUserAddress();  
+        if (isLoaded && !user) {
+            setDialogOpen(true);
+        }  
+    }, [])
 
-    useEffect(() => {
-        // console.log('useEffect-cartItems: ',cartItems)
-        if (isProductsLoaded === false && cartItems && Object.keys(cartItems).length) {
-            getCartProducts()
-            setIsProductsLoaded(true)
-        } 
-        
-        if (isProductsLoaded) {
-            adjustCartInfo()
-        } 
-
+    useEffect(() => {        
+        adjustCartInfo()
     }, [cartItems])
 
     useEffect(() => {
@@ -295,6 +258,26 @@ export default function Content() {
             <Image src={assets.samplePayment} alt="sample payment" width={393} height={100}   />
         </div>    
       </div>
+        <AlertDialog open={dialogOpen} onOpenChange={()=>setDialogOpen(false)}>
+            <AlertDialogTrigger asChild>
+                {/* You can leave this empty, since you control open state manually */}
+                <span />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                <AlertDialogTitle>Authentication Required</AlertDialogTitle>
+                <AlertDialogDescription>
+                    <span className="flex justify-start">
+                         Please login to continue? 
+                    </span>
+                </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                <AlertDialogAction  onClick={() => { router.push("/sign-in"); }}> Login </AlertDialogAction>
+                <AlertDialogCancel onClick={() => { router.push("/"); }}> Cancel</AlertDialogCancel>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
       
   </div>
   )

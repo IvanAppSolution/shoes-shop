@@ -271,3 +271,16 @@ export async function insertOrder(
       throw error;
     }    
 }
+
+export async function getCartItemProductsByArray(productIds: string[]): Promise<Product[] | []> {
+  if (!productIds) {
+    return [];  
+  }
+
+  return await prisma.product.findMany({
+    where: {
+      id: { in: productIds }
+    }
+  })
+  
+}

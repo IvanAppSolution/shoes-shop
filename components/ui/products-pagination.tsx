@@ -14,7 +14,7 @@ import { useContext } from "react";
 
 interface ProductsPaginationProps {
   searchResultCount: number;
-  refetchProducts: () => Promise<void>;
+  refetchProducts: () => void;
 }
 
 export default function ProductsPagination( { searchResultCount,  refetchProducts } :  ProductsPaginationProps) {
@@ -35,10 +35,9 @@ export default function ProductsPagination( { searchResultCount,  refetchProduct
     parseAsInteger.withDefault(1)
   );
 
+  const numPages = Math.ceil(searchResultCount / perPage);
 
   const handlePageChange = (value: number) => {
-    console.log('handlePageChange-value: ', value)
-    console.log('page: ', page)
     setOffset(perPage * ( value-1));
     setPage(value)
     setTimeout(() => {
@@ -46,16 +45,13 @@ export default function ProductsPagination( { searchResultCount,  refetchProduct
     }, 300);
   }
 
-  const numPages = Math.ceil(searchResultCount / perPage);
-  console.log('perPage: ', perPage)
-  console.log('numPages: ', numPages)
-
   const handlePerPageChange = (value: string) => {
     setPerPage(Number(value));
-    setTimeout(() => {
-      refetchProducts();
-      setOffset(0)
-      setPage(1)
+    setOffset(0)
+    setPage(1)
+    
+    setTimeout(() => {      
+      refetchProducts();      
     }, 300);
   };
   

@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Online Shop",
-  description: "Online Shop by Ivan Alcuino",
+  title: "Shoes Shop",
+  description: "Online shoes shop by Ivan Alcuino",
 };
 
 export default async function RootLayout({
@@ -32,9 +32,8 @@ export default async function RootLayout({
 }>) {
   const headersList = await headers();
   const url = headersList.get('x-url') || '';
-  // console.log('url: ', url)
   const inAdminPage = url.includes('admin');
-  // console.log('inAdminPage: ', inAdminPage)
+  
     return (
       <html lang="en" suppressHydrationWarning>
         <body
@@ -48,8 +47,8 @@ export default async function RootLayout({
                 disableTransitionOnChange
               >
                 <AppContextProvider>
-                  <Header></Header>
                   <main className='text-default min-h-screen text-gray-700 bg-white'>
+                    <Header></Header>
                     <div className={"px-6 " + (inAdminPage ? "" : " md:px-16 lg:px-24 xl:px-32")}> 
                       <NuqsAdapter>                            
                         {children}
