@@ -16,7 +16,7 @@ export default function Header() {
   const { theme } = useTheme()
   const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
   const [open, setOpen] = useState(false)
-  const {user, setUser, getCartCount, getUserCartItems, setCartItems, cartItems, setIsLoaded, isLoaded} = useContext(AppContext);
+  const {user, setUser, setShowUserLogin, getCartCount, getUserCartItems, setCartItems, cartItems, setIsLoaded, isLoaded} = useContext(AppContext);
   const [pending, setPending] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
@@ -35,6 +35,9 @@ export default function Header() {
             onSuccess: () => {
               router.push("/sign-in");
               router.refresh();
+              setUser(null);
+              setCartItems({});
+              setIsLoaded(false);
             },
           },
         });
@@ -46,12 +49,14 @@ export default function Header() {
     };
 
   useEffect(() => {
-    // console.log('starting-user: ', user)
-    // console.log('session-data:', data)
-    if (isLoaded === false &&  data) {
+    if (data) {
       initContext(data.user);
+    } 
+    
+    if (isPending === false && data === null) {
+      setIsLoaded(true);
     }
-  }, [data])
+  }, [data, isPending])
 
   useEffect(() => {
     if (isLoaded === true && Object.keys(cartItems).length) {
@@ -104,8 +109,8 @@ export default function Header() {
     </div>
     
 
-    {/* { open && (
-      <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
+    { open && (
+      <div className={`${open ? 'flex' : 'hidden'} absolute z-50 top-14.5 left-0 w-full bg-white shadow-md py-4 flex flex-col items-start gap-4 px-5 md:hidden`}>
       <Link href="/" onClick={()=> setOpen(false)}>Home</Link>
       <Link href="/products" onClick={()=> setOpen(false)}>All Product</Link>
       {user && 
@@ -121,13 +126,13 @@ export default function Header() {
         Login
       </button>
       ) : (
-        <button onClick={logout} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
+        <button onClick={handleSignOut} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
         Logout
       </button>
       )}
       
     </div>
-    )} */}
+    )}
 
   </nav>
   );

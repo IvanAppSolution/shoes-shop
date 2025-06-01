@@ -17,6 +17,7 @@ export function AppContextProvider({children}  : { children: React.ReactNode}) {
   const [viewProductId, setViewProductId] = useState("");
   const [defaultPerPage, setDefaultPerPage] = useState(30);
   
+  
   const addToCart = (itemId: string) =>{
     let cartData = structuredClone(cartItems);
 

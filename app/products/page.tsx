@@ -25,7 +25,7 @@ export default async function Products ({searchParams}: PageProps) {
           <div className='w-16 h-0.5 bg-primary rounded-full'></div>        
         </div>
         <ProductsFilter  />
-          <div className='grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5 mt-6'>
+          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5 mt-6'>
               <Suspense fallback={<div className='col-span-5 text-center'>Loading products...</div>}>
                 {products ? shuffleArray(products).map((product, index)=> (
                   <ProductCard key={index} product={product}/>

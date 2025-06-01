@@ -139,21 +139,21 @@
   display: block;
 }
 
-.admin-table thead {
+.table-list thead {
   @apply bg-muted text-muted-foreground;
 }
-.admin-table tbody tr {
+.table-list tbody tr {
   @apply text-gray-900 text-sm text-left
 }
 
-.admin-table thead th {
+.table-list thead th {
   @apply px-4 py-3 font-semibold truncate text-left;
 }
 
-.admin-table tbody tr {
+.table-list tbody tr {
   @apply border-t border-gray-500/20;
 }
 
-.admin-table tbody td {
+.table-list tbody td {
   @apply px-4 py-3;
 }

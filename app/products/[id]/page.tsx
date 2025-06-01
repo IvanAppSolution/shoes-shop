@@ -11,13 +11,6 @@ type PageProps = {
   params: Promise<{id: string}>
 }
 
-// type Props = {
-//   params: Promise<{id: string}>
-// }
-// type PageProps = {
-//   searchParams: Promise<SearchParams>
-// }
-
 export default async function ProductDetails({params}: PageProps) { 
   const { id } = await params
     const product = getProduct(id);

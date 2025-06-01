@@ -6,11 +6,11 @@ import NewsLetter from './_landing/news-letter';
 
 export default async function Home() {
     return (
-        <div className="mt-12">
+        <>
             <MainBanner /> 
             <Categories /> 
             <BestSeller />
             <NewsLetter /> 
-        </div>
+        </>
     );
 }
