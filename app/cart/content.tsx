@@ -118,9 +118,6 @@ export default function Content({productsPromise}: { productsPromise: Promise<Pr
     }
 
     useEffect(() => {
-        console.log('cart-user: ',user)
-        console.log('cart-products: ',products)
-        console.log('cart-isLoaded: ',isLoaded)
         if (user) getUserAddress();  
         if (isLoaded && !user) {
             setDialogOpen(true);

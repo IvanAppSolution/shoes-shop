@@ -49,10 +49,6 @@ export default function Header() {
     };
 
   useEffect(() => {
-    console.log('2header-user: ', user)
-    console.log('2header-data:', data)
-    console.log('2header-isLoaded:', isLoaded)
-
     if (data) {
       initContext(data.user);
     } 
@@ -61,13 +57,6 @@ export default function Header() {
       setIsLoaded(true);
     }
   }, [data, isPending])
-
-  useEffect(() => {
-    console.log('1header-user: ', user)
-    console.log('1header-data:', data)
-    console.log('1header-isLoaded:', isLoaded)
-   
-  }, [])
 
   useEffect(() => {
     if (isLoaded === true && Object.keys(cartItems).length) {
