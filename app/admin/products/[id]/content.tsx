@@ -34,9 +34,9 @@ export default function Content({product, isAddProduct = false}:{product: Produc
     message: '',
     uploadedUrl: [],
   }
-  // const resizer: typeof Resizer = (Resizer);
-  let [state, action, isPending] = useActionState(formProduct, initialState);
-  let [ stateUpload, actionUpload, isUploading ] = useActionState(uploadFile,initialUploadState);
+
+  const [state, action, isPending] = useActionState(formProduct, initialState);
+  const [ stateUpload, actionUpload, isUploading ] = useActionState(uploadFile,initialUploadState);
   const [prodImages, setProdImages ] = useState(product && product?.images || [])
   const [isReplaceImage, setIsReplaceImage] = useState(false); //false means add image.
   const [imageIndex, setImageIndex] = useState(-1);

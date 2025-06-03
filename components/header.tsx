@@ -84,7 +84,7 @@ export default function Header() {
         {cartCount ? <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">{cartCount}</button> : ""}
       </div>
 
-    {!user ? ( <Link href="/sign-in" className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full">Sing In</Link>) :  
+    {!user ? ( <Link href="/sign-in" className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full">Sign In</Link>) :  
       (
         <div className='relative group'>
           <Image src={assets.profile_icon} className='w-10' alt="" />

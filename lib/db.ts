@@ -1,5 +1,5 @@
 // import { MongoClient, ServerApiVersion, Document, WithId } from "mongodb";
-import { Prisma, Product } from "./generated/prisma";
+import { Prisma, Product, User, Address } from "./generated/prisma";
 import prisma from "./prisma";
 
 const seedProducts = async () => {
@@ -240,8 +240,67 @@ export async function getCartItems(userId: string){
   return prisma.user.findFirst({select: {cartItems: true}, where: {id: userId}})
 }
 
-export async function getUserAddress(userId: string){
-  return prisma.address.findFirst({where: {id: userId}})
+export async function getUserInfo(userId: string) : Promise<User> {
+  const user = await prisma.user.findFirst({where: {id: userId}})
+  if (user) {
+    return user;
+  } else {
+    return {} as User; // Return null if user not found
+  }
+}
+
+export async function updateUser({userId, name, email} : {userId: string, name: string, email: string} ) : Promise<User | null> {
+  try {
+    const user = await prisma.user.update({
+      where: {id: userId},
+      data: {name, email}
+    }); 
+
+    if (user) {
+      return user;
+    } else {
+      return null; 
+    }
+
+  } catch(error) {
+    console.error('Error:', error);
+    throw error;
+  }  
+
+}
+
+export async function getAddress(userId: string): Promise<Address | null> {
+  if (userId) {
+    const address = await prisma.address.findFirst({where: {userId}})
+    if (address) {
+      return address;
+    } else {
+      return null; // Return null if no address found
+    }
+  } else {
+    return null; // Return null if userId is not provided
+  }
+ 
+}
+
+export async function updateUserAddress({addressId, state, city, street, zipcode, phone} : {addressId: string, state: string, city: string, street: string, zipcode: string, phone: string} ) : Promise<Address | null> {
+  try { 
+    
+    const address = await prisma.address.update({
+      where: { id: addressId },
+      data: {state, city, street, zipcode, phone}
+    }); 
+
+    if (address) {
+      return address;
+    } else {
+      return null; 
+    }
+  } catch(error) {
+    console.error('Error:', error);
+    throw error;
+  }  
+
 }
 
 export async function insertOrder(
