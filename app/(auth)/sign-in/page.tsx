@@ -11,7 +11,6 @@ import { InputFormField } from "@/components/ui/input-form-field";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { ErrorContext } from "@better-fetch/fetch";
 import LoadingButton from "@/components/loading-button";
 
 const formSchema = z.object({
@@ -47,16 +46,16 @@ export default function Signin() {
 				onSuccess: async () => {
 					router.push("/");
 					router.refresh();
-				},
-				onError: (ctx: ErrorContext) => {
-					console.log(ctx);
-					toast({
-						title: "Something went wrong",
-						description: ctx.error.message ?? "Something went wrong.",
-						variant: "destructive",
-					});
-				},
-			}
+        },
+        onError: (ctx) => {
+          console.log(ctx.error);
+          toast({
+            title: "Something went wrong",
+            description: ctx.error?.message ?? "Something went wrong.",
+            variant: "destructive",
+          });
+        },
+      }
 		);
 		setPendingCredentials(false);
 
