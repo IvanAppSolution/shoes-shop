@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export type ProductFormData = {
-  name?: string;
-  brand?: string;
+  name: string;
+  brand: string;
   description?: string;
   category?: string;
   price?: string;

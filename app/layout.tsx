@@ -32,7 +32,7 @@ export default async function RootLayout({
 }>) {
   const headersList = await headers();
   const url = headersList.get('x-url') || '';
-  const inAdminPage = url.includes('admin');
+  const inAdminPage = url.includes('admin') || url.includes('profile');
   
     return (
       <html lang="en" suppressHydrationWarning>
@@ -49,10 +49,10 @@ export default async function RootLayout({
                 <AppContextProvider>
                   <main className='text-default min-h-screen text-gray-700 bg-white'>
                     <Header></Header>
-                    <div className={"px-6 " + (inAdminPage ? "" : " md:px-16 lg:px-24 xl:px-32")}> 
-                      <NuqsAdapter>                            
-                        {children}
-                      </NuqsAdapter>
+                    <div className={" " + (inAdminPage ? "" : " px-6 md:px-16 lg:px-24 xl:px-32")}> 
+                    <NuqsAdapter>                            
+                      {children}
+                    </NuqsAdapter>
                     </div>
                   </main>
                 </AppContextProvider>
