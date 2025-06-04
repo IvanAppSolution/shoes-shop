@@ -87,7 +87,8 @@ export default function Content({productsPromise}: { productsPromise: Promise<Pr
                     description: item.description,
                     offerPrice: item.offerPrice,
                     quantity: item.quantity,
-                    amount: item.amount
+                    amount: item.amount,
+                    image: item.images[0],
                 }
             })
 

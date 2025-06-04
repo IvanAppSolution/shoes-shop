@@ -1,5 +1,5 @@
 // import { MongoClient, ServerApiVersion, Document, WithId } from "mongodb";
-import { Prisma, Product, User, Address } from "./generated/prisma";
+import { Prisma, Product, User, Address, Order } from "./generated/prisma";
 import prisma from "./prisma";
 
 const seedProducts = async () => {
@@ -329,6 +329,18 @@ export async function insertOrder(
       console.error('Error inserting order:', error);
       throw error;
     }    
+}
+
+export async function getOrders(userId: string): Promise<Order[] | []> {
+  try {
+    return await prisma.order.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' }
+    });
+  } catch(error) {
+    console.error('Error fetching orders:', error);
+    throw error;
+  }  
 }
 
 export async function getCartItemProductsByArray(productIds: string[]): Promise<Product[] | []> {

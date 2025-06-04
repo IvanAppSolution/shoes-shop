@@ -1,3 +1,4 @@
+"use client";
 import { useRouter, usePathname  } from "next/navigation";
 import { assets } from "@/assets/assets";
 import Link from "next/link";
@@ -10,7 +11,7 @@ export default function SidePanel({children}:{children: ReactNode}) {
 	const sidebarLinks = [
       // { name: "Add Product", path: "/admin/add-product", icon: assets.add_icon },
       { name: "Profile", path: "/profile", icon: assets.product_list_icon },
-      { name: "My Orders", path: "/profile/orders", icon: assets.order_icon },
+      { name: "My Orders", path: "/profile/my-orders", icon: assets.order_icon },
   ];
 
   return (
