@@ -24,7 +24,7 @@ export async function checkoutAction (
     const line_items = items.map((product: any) => ({
       price_data: {
         currency: "usd",
-        product_data: { name: product?.name, description: product?.description },
+        product_data: { name: product?.name, description: product?.description, image:product?.images[0] },
         unit_amount: parseFloat(product?.offerPrice) * 100,
       },
       quantity: parseInt(product.quantity),

@@ -31,31 +31,15 @@ return (
             <table className="md:table-auto table-fixed w-full overflow-hidden table-list">
               <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th className="hidden md:block">Role</th>
-                    <th>Status</th>
-                    <th>Joined</th>
+                    <th>Order Id</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Date ordered</th>
                 </tr>
               </thead>
               <tbody>
-              {/* {users.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role ?? ""}</td>
-                  <td>
-                    {user.banned ? (
-                      <span className="text-red-500">Banned</span>
-                    ) : (
-                      <span className="text-green-500">Active</span>
-                    )}
-                  </td>
-                  <td>
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))} */}
+              
               </tbody>
             </table>	
           </div>

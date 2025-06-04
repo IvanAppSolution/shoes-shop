@@ -12,7 +12,9 @@ export default async function Profile() {
   })
   
   if (!session) {
-    return <div className="m-48 text-center">Please sign in to view your profile.<br/><br/><Link href="/sign-in"><Button>Sign In</Button></Link></div>;
+    return <div className="m-48 text-center">Please sign in to view your profile.<br/><br/>
+      <Link href="/sign-in"><Button>Sign In</Button></Link>
+    </div>;
   } 
   
   console.log("Session user ID:", session.user.id);
