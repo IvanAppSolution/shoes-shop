@@ -71,8 +71,6 @@ export function AppContextProvider({children}  : { children: React.ReactNode}) {
   }
 
   const emptyCart = ()=>{
-    // let cartData = structuredClone(cartItems);
-    // cartData = {}
     setCartItems({})
   }
 
@@ -95,7 +93,7 @@ export function AppContextProvider({children}  : { children: React.ReactNode}) {
           userId: user ? user.id : '',
           cartItems: JSON.stringify(cartItems),
         }
-        // console.log('updateCart data: ', data)
+
         const response = await fetch('/api/cart/updateUserCart', { 
           method: "POST",
           headers: {
@@ -104,7 +102,6 @@ export function AppContextProvider({children}  : { children: React.ReactNode}) {
           body: JSON.stringify(data),
         })
    
-        // console.log('updateCart response: ', response)
     } catch (error: any) {
         toast({
           title: "Error",
@@ -165,8 +162,6 @@ export function AppContextProvider({children}  : { children: React.ReactNode}) {
     }
   }
 
-  
-
   const getCartCount = ():number => {
     let totalCount = 0;
     for(const item in cartItems){
@@ -183,16 +178,12 @@ export function AppContextProvider({children}  : { children: React.ReactNode}) {
     return array;
   }
 
-
   useEffect(() => {
-    console.log('')
     if (isLoaded) {
       updateCart();
     }
     
-  }, [cartItems])
-
-  
+  }, [cartItems]) 
  
 
   return <AppContext.Provider value={{

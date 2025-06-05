@@ -147,7 +147,7 @@
 }
 
 .table-list thead th {
-  @apply px-4 py-3 font-semibold truncate text-left;
+  @apply px-4 py-3 font-semibold truncate;
 }
 
 .table-list tbody tr {
