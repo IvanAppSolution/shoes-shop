@@ -24,13 +24,12 @@ export async function checkoutAction (
     const line_items = items.map((product: any) => ({
       price_data: {
         currency: "usd",
-        product_data: { name: product?.name, description: product?.description, image:product?.images[0] },
+        product_data: { productId: product.productId, name: product?.name, description: product?.description, image:product?.images[0] },
         unit_amount: parseFloat(product?.offerPrice) * 100,
       },
       quantity: parseInt(product.quantity),
-      // unit_amount: parseFloat(product.amount),
     }));
-    console.log('line_items: ', line_items)
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items,
@@ -38,8 +37,6 @@ export async function checkoutAction (
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
     });
-
-    // console.log('session: ', session) 
 
     insertOrder({
       userId,
@@ -55,11 +52,9 @@ export async function checkoutAction (
       url: session.url!,
       paymentOption: paymentOption
     };
-    // redirect(session.url!);
+
   } else {
      
-    console.log('insert COD items: ', items)
-
     insertOrder({
       userId,
       items,
@@ -67,7 +62,6 @@ export async function checkoutAction (
       amount: parseFloat(totalAmount),
       paymentType: paymentOption      
     });
-     
 
     return {
       success: true,

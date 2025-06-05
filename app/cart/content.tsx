@@ -22,7 +22,7 @@ import {
 
 export default function Content({productsPromise}: { productsPromise: Promise<Product[]> } ) {   
     const {user, isLoaded, cartItems, getCartCount, currency, updateCartItem, subtractFromCart, emptyCart} = useContext(AppContext);
-    const [products, setProducts] = useState<Product[]>(use(productsPromise) || []); //<Product[] | []> useState(productList)
+    const [products, setProducts] = useState<Product[]>(use(productsPromise)); //<Product[] | []> useState(productList)
     const [addresses, setAddresses] = useState<Address[] | []>([])
     const [showAddress, setShowAddress] = useState(false)
     const [selectedAddress, setSelectedAddress] = useState<Address | undefined>(undefined)
@@ -82,7 +82,7 @@ export default function Content({productsPromise}: { productsPromise: Promise<Pr
  
             const items = products.map((item: any) => {
                 return {
-                    id: item.id,
+                    productId: item.id,
                     name: item.name,
                     description: item.description,
                     offerPrice: item.offerPrice,
@@ -119,14 +119,17 @@ export default function Content({productsPromise}: { productsPromise: Promise<Pr
     }
 
     useEffect(() => {
-        if (user) getUserAddress();  
+        if (isLoaded && user) getUserAddress();  
+        
         if (isLoaded && !user) {
             setDialogOpen(true);
         }  
-    }, [])
+    }, [isLoaded])
 
-    useEffect(() => {        
-        adjustCartInfo()
+    useEffect(() => { 
+        if (isLoaded && Object.keys(cartItems).length > 0) {
+            adjustCartInfo()
+        }
     }, [cartItems])
 
     useEffect(() => {

@@ -31,13 +31,16 @@ export default async function MyOrders() {
     return (
       <div className="flex flex-col">
         {Object.entries(items).map(([key, item]: [string, any]) => {
-          const { name, offerPrice, quantity, amount, image } = item;
-          console.log('item: ', item)
+          const {productId, name, offerPrice, quantity, amount, image } = item;
+          
           return (
-            <div key={key} className="flex justify-between items-center">
-              <span><Image src={image} width={50} height={50} alt={name}  /> </span>
+            <div key={key} className="flex justify-between items-center">               
+              <span><Link href={`/products/${productId}`}><Image src={image} width={50} height={50} alt={name}  /></Link></span>
               <span>{name}</span>
-              <span>{currency}{offerPrice} x {quantity} - {currency}{amount}</span>
+              {
+                quantity > 1 ? <span>{currency}{offerPrice} x {quantity} - {currency}{amount}</span>
+                : <span>{currency}{offerPrice}</span>
+              }
             </div>
           );
         })}
@@ -55,18 +58,16 @@ export default async function MyOrders() {
                <table className="md:table-auto table-fixed w-full overflow-hidden table-list">
                  <thead>
                    <tr>
-                      
                        <th className="">Description</th>
                        <th>Amount</th>
                        <th>Payment</th>
-                       <th>Date ordered</th>
+                       <th>Date</th>
                    </tr>
                  </thead>
                  <tbody>
                     {orders.length > 0 ? orders.map((order) => (
                       <tr key={order.id} className="hover:bg-gray-100/90">
-                        {/* <td className="text-center">{order.id}</td> */}
-                        <td className="">{itemDescription (order.items)}</td>
+                        <td ><div className="w-full mb-2">Order Id: {order.id}</div>{itemDescription (order.items)}</td>
                         <td className="text-center">{currency}{order.amount} </td>
                         <td className="text-center">{order.paymentType}</td>
                         <td className="text-center">{new Date(order.createdAt).toLocaleDateString()}</td>
